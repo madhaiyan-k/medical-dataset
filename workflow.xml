@@ -1,0 +1,40 @@
+<!--
+	This workflow runs hive queries.
+-->
+
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="hive-wf">
+     <start to="hive-node"/>
+
+    <action name="hive-node">
+        <hive xmlns="uri:oozie:hive-action:0.4">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare>
+                <delete path="${outputDir}"/>
+                <delete path="${resultbkupDir}"/>
+                <mkdir path="${outputDir}"/>
+                <mkdir path="${resultbkupDir}"/>
+            </prepare>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <script>hive.sql</script>
+            <param>db_name=${databaseName}</param>
+            <param>gnrl_pay_table=${gnrlpaytableName}</param>
+            <param>rsrch_pay_table=${rsrchpaytableName}</param>
+            <param>output_data_dir=${outputDir}</param>
+            <param>result_bkup_dir=${resultbkupDir}</param>
+        </hive>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+    <kill name="fail">
+        <message>Hive failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>
+

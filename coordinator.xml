@@ -1,0 +1,12 @@
+<coordinator-app name="hive-job-wf-coordinator"
+                 frequency="${coord:minutes(frequency)}"
+                 start="${startTime}"
+                 end="${endTime}"
+                 timezone="${timezone}"
+                 xmlns="uri:oozie:coordinator:0.1">
+    <action>
+        <workflow>
+            <app-path>${workflowPath}</app-path>
+        </workflow>
+    </action>
+</coordinator-app>
