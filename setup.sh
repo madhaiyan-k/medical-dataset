@@ -5,8 +5,6 @@
 
 rm -rf medical-dataset
 
-git clone https://github.com/madhaiyan-k/medical-dataset.git
-
 sudo -u hdfs hdfs dfs -rm -r -skipTrash /medical-data-analysis
 
 sudo -u hdfs hdfs dfs -mkdir /medical-data-analysis
