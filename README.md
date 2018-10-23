@@ -18,3 +18,13 @@ Update following configuration before you run workflow for one time.
 2. Configure data base and table names in job.properties
 3. Update oozie command (oozie job --oozie http://manager-0:11000/oozie -config job.properties -run) in setup.sh
 4. Run setup.sh for workflow execution
+
+
+## spark pre-requisites
+Convert the plain dataset into parquet file using snappy compression for better results (default in spark2.3).
+See spark_jobs directory for more information
+
+By running this oozie job, will met into an issue of jackson dependancy with oozie and spark.
+https://community.hortonworks.com/content/supportkb/186305/error-comfasterxmljacksondatabindjsonmappingexcept.html
+
+To avoid that, please follow the solution provided in the above post.

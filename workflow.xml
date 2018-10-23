@@ -2,7 +2,7 @@
 	This workflow runs hive queries.
 -->
 
-<workflow-app xmlns="uri:oozie:workflow:0.4" name="hive-wf">
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="medical_dataset_query_execution">
      <start to="hive-node"/>
 
     <action name="hive-node">
@@ -28,8 +28,22 @@
             <param>output_data_dir=${outputDir}</param>
             <param>result_bkup_dir=${resultbkupDir}</param>
         </hive>
-        <ok to="end"/>
+        <ok to="spark-node"/>
         <error to="fail"/>
+    </action>
+
+    <action name="spark-node">
+        <spark xmlns="uri:oozie:spark-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>yarn-cluster</master>
+            <name>medical_dataset_sqarksql</name>
+            <jar>query_execution.py</jar>
+            <arg>${gpay_dataset_location}</arg>
+            <arg>${rpay_dataset_location}</arg>
+        </spark>
+        <ok to="end" />
+        <error to="fail" />
     </action>
 
     <kill name="fail">
