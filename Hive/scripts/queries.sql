@@ -55,3 +55,17 @@ from p,c
 where p.Physician_Specialty=c.Physician_Specialty and p.program_year=c.program_year
 order by program_year,percentage>80 asc limit 2000;
 
+
+/* Query 6: ( Joining Both General and Research Table and finding the common specialities and total funding for each of them ) */
+
+with c as(
+    select Physician_Specialty,program_year,sum(Total_Amount_of_Payment_USDollars) as gen_funding from gnrl_pay_orc_partition_3 group by Physician_Specialty,program_year
+), p as(
+    select Physician_Specialty,program_year,sum(Total_Amount_of_Payment_USDollars) as rsrch_funding from rsrch_pay_orc_partition_3 group by Physician_Specialty,program_year
+)
+select
+    c.Physician_Specialty,
+    c.program_year,
+    (c.gen_funding+p.rsrch_funding)
+from p inner join c
+on p.Physician_Specialty=c.Physician_Specialty and p.program_year=c.program_year;
